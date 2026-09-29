@@ -17,14 +17,14 @@ workflow PREPARE_GENOME {
     // ----------------------------
     // Genome FASTA (resolved from --fasta or the selected iGenomes --genome)
     // ----------------------------
-    def fasta = params.genome ? params.genomes[params.genome].fasta ?: false : params.fasta
+    def genome_fasta = params.genome ? params.genomes[params.genome].fasta ?: false : params.fasta
 
-    if (fasta.toString().endsWith('.gz')) {
-        GUNZIP_FASTA(channel.fromPath(fasta, checkIfExists: true))
+    if (genome_fasta.toString().endsWith('.gz')) {
+        GUNZIP_FASTA(channel.fromPath(genome_fasta, checkIfExists: true))
         ch_fasta = GUNZIP_FASTA.out.fasta.first()
     }
     else {
-        ch_fasta = channel.fromPath(fasta, checkIfExists: true).first()
+        ch_fasta = channel.fromPath(genome_fasta, checkIfExists: true).first()
     }
 
     // ----------------------------
